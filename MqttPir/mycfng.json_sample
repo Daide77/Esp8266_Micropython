@@ -1,0 +1,18 @@
+{
+   "MQTTserver"                  : "xxx.xx.xx.xx"         ,
+   "MQTTuserid"                  : "PirPortico"           ,
+   "MQTTpasswd"                  : "MyAwsomePass"         ,
+   "MQTTclientid"                : "PirPortico"           ,
+   "MQTT_DEFAULT_IS_TO_NOTIFY"   : "1"                    ,
+   "MQTT_OUT_PIR_STATUS" : "allarm/status/PorticoStatus"  ,
+   "MQTT_IN_CMD_TOPIC"   : "allarm/status/PorticoComand"  ,
+   "MQTT_OUT_TRG_NOTIFY" : "allarm/sensors/PirPortico"    ,
+   "MQTT_OUT_TRG_MSG"    : {
+      "reason" : "motion"                                 ,
+      "name"   : "Portico"                                ,
+      "plug"   : "pir1"
+   },
+   "SSIDWIFI"  : "MyAmazingWifiNetwork"                   ,
+   "PASSWIFI"  : "UnmatchedPassword"                      ,
+   "LOG_LEVEL" : "DEBUG,INFO,WARN,ERROR,VERBO"
+}

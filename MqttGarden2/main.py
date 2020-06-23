@@ -182,7 +182,7 @@ def main( GS ):
    while True:
        if PrintCnt == LOOP_SKIPS:     # Limit console noise and operations rate
          PrintCnt  = 0
-         log( "DEBUG","---- Long Loop START ----" )
+         log( "DEBUG","---- MqttGarden2 Long Loop START ----" )
          if gc.mem_free() < MIN_FREE_MEM:
             log( "INFO", gc.mem_free() ) 
             log( "INFO","gc cleans memory" )
