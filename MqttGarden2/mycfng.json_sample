@@ -1,0 +1,11 @@
+{
+   "MQTTserver"                  : "xx.xx.xx.xx"          ,
+   "MQTTuserid"                  : "CentralinaGiardino"   ,
+   "MQTTpasswd"                  : "mysupersecretpass"    ,
+   "MQTTclientid"                : "CentralinaGiardino"   ,
+   "MQTT_OUT_DEVICE_STATUS" : "garden/valve1/DeviceStatus" ,
+   "MQTT_IN_CMD_TOPIC"      : "garden/valve1/ValvesComand" ,
+   "SSIDWIFI"  : "MySsIDId"                                ,
+   "PASSWIFI"  : "supersecretPassoword"                    ,
+   "LOG_LEVEL" : "DEBUG,INFO,WARN,ERROR,VERBO"                         
+}
