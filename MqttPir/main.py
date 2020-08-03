@@ -169,49 +169,50 @@ def MqttSetUP( GS ):
    GS.c.publish( GS.OUT_PIR_STATUS, msg=ujson.dumps( GS.statusMsg ), retain=True, qos=1 )
 
 def main(GS):
-   GS.ConfigFile     = 'mycfng.json'
-   GS.NotifyFile     = 'NotifyStatus.json'
-   GS.data           = {}  
-   GS.data2          = {}  
-   LoadConfig( GS )
-   SetNotify( GS )
-   # PIR SETUP Connettore D5
-   button            = Pin( 14, Pin.IN, Pin.PULL_UP )
-   # Station UP
-   GS.station        = network.WLAN( network.STA_IF )
-   # Disabilito AP 
-   ap_if             = network.WLAN( network.AP_IF )
-   ap_if.active( False )
-   sleep_ms( LOOP_WAIT_MS ) 
-   sleep_ms( LOOP_WAIT_MS ) 
-   sleep_ms( LOOP_WAIT_MS ) 
-   WifiConnect(GS)
-   MqttSetUP(GS)
-   internalLed.on()
-   PrintCnt    = 0
-   while True:
-       if PrintCnt == LOOP_SKIPS: # Limit console noise 
-          log( "INFO","----- LOOOP MqttPIR -----" )
-          timer = Timer(0)
-          timer.init( period=( TIMEOUT_MS * 30 ), mode=Timer.ONE_SHOT, callback=timeout_callback )
-          try:
-             log( "DEBUG","NewCheck" )
-             GS.c.check_msg()
-             log( "DEBUG","NewCheck DONE" )
-             log( "DEBUG","Ping Start" )
-             GS.c.ping()
-             log( "DEBUG","Ping DONE" )
-             internalLed.on()
-          except Exception as e:
-             log( "ERROR",'Error {}'.format(e) )
-             internalLed.off()
-             machine.reset()
-             # GS.c.disconnect()
-             # WifiConnect(GS)
-             # MqttSetUP(GS)
-             sleep_ms(LOOP_WAIT_MS)
-          finally:  
-             timer.deinit()
+   try:
+      GS.ConfigFile     = 'mycfng.json'
+      GS.NotifyFile     = 'NotifyStatus.json'
+      GS.data           = {}  
+      GS.data2          = {}  
+      LoadConfig( GS )
+      SetNotify( GS )
+      # PIR SETUP Connettore D5
+      button            = Pin( 14, Pin.IN, Pin.PULL_UP )
+      # Station UP
+      GS.station        = network.WLAN( network.STA_IF )
+      # Disabilito AP 
+      ap_if             = network.WLAN( network.AP_IF )
+      ap_if.active( False )
+      sleep_ms( LOOP_WAIT_MS ) 
+      sleep_ms( LOOP_WAIT_MS ) 
+      sleep_ms( LOOP_WAIT_MS ) 
+      WifiConnect(GS)
+      MqttSetUP(GS)
+      internalLed.on()
+      PrintCnt    = 0
+      while True:
+          if PrintCnt == LOOP_SKIPS: # Limit console noise 
+             log( "INFO","----- LOOOP MqttPIR -----" )
+             timer = Timer(0)
+             timer.init( period=( TIMEOUT_MS * 30 ), mode=Timer.ONE_SHOT, callback=timeout_callback )
+             try:
+                log( "DEBUG","NewCheck" )
+                GS.c.check_msg()
+                log( "DEBUG","NewCheck DONE" )
+                log( "DEBUG","Ping Start" )
+                GS.c.ping()
+                log( "DEBUG","Ping DONE" )
+                internalLed.on()
+             except Exception as e:
+                log( "ERROR",'Error {}'.format(e) )
+                internalLed.off()
+                machine.reset()
+                # GS.c.disconnect()
+                # WifiConnect(GS)
+                # MqttSetUP(GS)
+                sleep_ms(LOOP_WAIT_MS)
+             finally:  
+                timer.deinit()
 
        if not button.value():
            if PrintCnt == LOOP_SKIPS: # Limit console noise 
