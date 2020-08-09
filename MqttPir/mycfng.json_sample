@@ -8,10 +8,11 @@
    "MQTT_IN_CMD_TOPIC"   : "allarm/status/PorticoComand"  ,
    "MQTT_OUT_TRG_NOTIFY" : "allarm/sensors/PirPortico"    ,
    "MQTT_OUT_TRG_MSG"    : {
-      "reason" : "motion"                                 ,
-      "name"   : "Portico"                                ,
-      "plug"   : "pir1"
-   },
+      "reason"     : "motion"                             ,
+      "name"       : "Portico"                            ,
+      "plug"       : "pir2"                               ,
+      "confidence" : 100
+   }                                                      ,
    "SSIDWIFI"  : "MyAmazingWifiNetwork"                   ,
    "PASSWIFI"  : "UnmatchedPassword"                      ,
    "LOG_LEVEL" : "DEBUG,INFO,WARN,ERROR,VERBO"
