@@ -19,6 +19,9 @@ MQTT_KEEPALIVE_SEC = 3
 internalLed = machine.Pin(2, machine.Pin.OUT)
 micropython.alloc_emergency_exception_buf(100)
 
+# DONE Normalizzare i messaggi in modo tale
+# che siano tutti in formato JSON
+
 # class FunctTimeOutErr(Exception):
 #     def __init__(self, m):
 #         self.message = m
@@ -105,7 +108,8 @@ def SetNotify( GS ):
 def sub_cb( topic, msg ):
     log( 'INFO', (topic, msg) )
     if topic == GS.IN_CMD_TOPIC:
-       # Input comand : '{ "MQTT_IS_TO_NOTIFY" : 0, "COMMAND": "REBOOT" }'  
+       # Comando in entrata : '{ "MQTT_IS_TO_NOTIFY" : 0, "COMMAND": "REBOOT" }'  
+       # Normalizzare il messaggio in uscita inserire ad esempio '{ "rssi":-65 , "MQTT_IS_TO_NOTIFY" : 1 }'
        GS.statusMsg["rssi"] = str(GS.station.status('rssi'))
        log("INFO", ( "WIFI rssi: ", GS.statusMsg['rssi'] ) )
        try:
@@ -214,37 +218,42 @@ def main(GS):
              finally:  
                 timer.deinit()
 
-       if not button.value():
-           if PrintCnt == LOOP_SKIPS: # Limit console noise 
-             GS.statusMsg["Circut"] = "closed"
-             msg      = "Circut closed"
-             log( "DEBUG", msg )
-             PrintCnt = 0
-           else:
-             PrintCnt += 1    
-       else:		
-           msg = "Circut opened!"
-           log( "INFO", msg )
-           GS.statusMsg["Circut"] = "opened"
-           if int(GS.IS_TO_NOTIFY) == 1:
-              try:
-                 log("DEBUG", "Pub on Trigger: ["+str(GS.OUT_TRG_NOTIFY)+"]" )
-                 GS.c.publish( GS.OUT_TRG_NOTIFY, ujson.dumps(GS.OUT_TRG_MSG), qos=1 )
-                 log("DEBUG", "Pub Status on: ["+str(GS.OUT_PIR_STATUS)+"]" )
-                 GS.c.publish( GS.OUT_PIR_STATUS, msg=ujson.dumps( GS.statusMsg ), retain=True, qos=1 )
-                 msg = "Notifications DONE"
+          if not button.value():
+              if PrintCnt == LOOP_SKIPS: # Limit console noise 
+                GS.statusMsg["Circut"] = "closed"
+                msg      = "Circut closed"
+                log( "DEBUG", msg )
+                PrintCnt = 0
+              else:
+                PrintCnt += 1    
+          else:		
+              msg = "Circut opened!"
+              log( "INFO", msg )
+              GS.statusMsg["Circut"] = "opened"
+              if int(GS.IS_TO_NOTIFY) == 1:
+                 try:
+                    log("DEBUG", "Pub on Trigger: ["+str(GS.OUT_TRG_NOTIFY)+"]" )
+                    GS.c.publish( GS.OUT_TRG_NOTIFY, ujson.dumps(GS.OUT_TRG_MSG), qos=1 )
+                    log("DEBUG", "Pub Status on: ["+str(GS.OUT_PIR_STATUS)+"]" )
+                    GS.c.publish( GS.OUT_PIR_STATUS, msg=ujson.dumps( GS.statusMsg ), retain=True, qos=1 )
+                    msg = "Notifications DONE"
+                    log( "DEBUG", msg )
+                 except Exception as e:
+                    log( "ERROR",'Error {}'.format(e) )
+                    internalLed.off()
+                    machine.reset()
+                    sleep_ms(LOOP_WAIT_MS)
+              else:
+                 log("DEBUG", "IS TO NOTIFY: ["+str(GS.IS_TO_NOTIFY)+"]" )
+                 msg = "Notification not sent. Notification disabled"
                  log( "DEBUG", msg )
-              except Exception as e:
-                 log( "ERROR",'Error {}'.format(e) )
-                 internalLed.off()
-                 machine.reset()
-                 sleep_ms(LOOP_WAIT_MS)
-           else:
-              log("DEBUG", "IS TO NOTIFY: ["+str(GS.IS_TO_NOTIFY)+"]" )
-              msg = "Notification not sent. Notification disabled"
-              log( "DEBUG", msg )
-   
-       sleep_ms(LOOP_WAIT_MS)
+      
+          sleep_ms(LOOP_WAIT_MS)
+   except Exception as e:
+      log( "ERROR",'Error {}'.format(e) )
+      internalLed.off()
+      machine.reset()
+      sleep_ms(LOOP_WAIT_MS)
    GS.c.disconnect()
 
 main(GS)
