@@ -1,0 +1,11 @@
+{
+   "MQTTserver"                  : "mqtthostIP"              ,
+   "MQTTuserid"                  : "MqttUsername"            ,
+   "MQTTpasswd"                  : "mysecretpass"            ,
+   "MQTTclientid"                : "ClientIdMqtt"            ,
+   "MQTT_OUT_STATUS"             : "My/Topic/Status"         ,
+   "MQTT_IN_CMD_TOPIC"           : "My/Topic/Comand"         ,
+   "SSIDWIFI"                    : "mySSIDWIFI"              ,
+   "PASSWIFI"                    : "myPASSWIFI"              ,
+   "LOG_LEVEL"                   : "DEBUG,INFO,WARN,ERROR"
+}

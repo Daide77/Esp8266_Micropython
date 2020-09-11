@@ -25,11 +25,11 @@ class GeneralStruct:
     pass
 
 GS             = GeneralStruct()
+GS.LOG_LEVEL   = [ "DEBUG", "INFO", "WARN", "ERROR" ]
 
 # Basic Function
-LOG_LEVEL      = [ "DEBUG", "INFO", "WARN", "ERROR" ]
 def log( Level, msg ):
-    if Level in LOG_LEVEL:
+    if Level in GS.LOG_LEVEL:
         print( "Level: {} Msg: {} ".format(str(Level), str(msg)) )
 
 def StringToList( sep, string, purpose="logLevel" ):
@@ -37,15 +37,15 @@ def StringToList( sep, string, purpose="logLevel" ):
    try:
       newList = string.split( sep )
    except:
-      log("WARN", ("No new list, keeping old list ",LOG_LEVEL) )
+      log("WARN", ("No new list, keeping old list ",GS.LOG_LEVEL) )
       newList = []
-      return LOG_LEVEL
+      return GS.LOG_LEVEL
    if len(newList) > 0:
       log("INFO", ("new list is",newList) )
       return newList
    else:
-      log("INFO", ("keeping old list ",LOG_LEVEL) )
-      return LOG_LEVEL
+      log("INFO", ("keeping old list ",GS.LOG_LEVEL) )
+      return GS.LOG_LEVEL
 
 def fileExists(filename):
     try:
@@ -71,7 +71,7 @@ def LoadConfig( GS ):
       GS.PASSWIFI               = GS.data["PASSWIFI"]
       # Format  { "status":"OFFLINE|ONLINE", "rssi":"-65", "rele1":1, "rele2":1 }
       GS.statusMsg              = { "status":"ONLINE" } 
-      LOG_LEVEL                 = StringToList( ',', str( GS.data["LOG_LEVEL"] ) ) 
+      GS.LOG_LEVEL              = StringToList( ',', str( GS.data["LOG_LEVEL"] ) ) 
       log( "INFO", "Loading config DONE\n" )
 
 # Functions
